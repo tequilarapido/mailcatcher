@@ -18,7 +18,7 @@ class ContextInitializer implements ContextInitializerInterface
         $this->purgeBeforeScenario = $purgeBeforeScenario;
     }
 
-    public function supports(ContextInterface $context)
+    public function supports(Context $context)
     {
         return $context instanceof MailCatcherContextInterface;
     }
