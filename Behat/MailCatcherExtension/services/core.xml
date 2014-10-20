@@ -18,7 +18,7 @@
             <argument type="service" id="behat.mailcatcher.client" />
             <argument>%behat.mailcatcher.purge_before_scenario%</argument>
 
-            <tag name="behat.context.initializer" />
+            <tag name="context.initializer" />
         </service>
 
     </services>

@@ -23,7 +23,7 @@ class ContextInitializer implements ContextInitializerInterface
         return $context instanceof MailCatcherContextInterface;
     }
 
-    public function initializeContext(ContextInterface $context)
+    public function initializeContext(Context $context)
     {
         if (!$context instanceof MailCatcherContextInterface) {
             return;
