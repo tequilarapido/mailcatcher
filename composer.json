@@ -1,5 +1,5 @@
 {
-    "name": "alexandresalome/mailcatcher",
+    "name": "daviddel/mailcatcher",
     "license": "MIT",
     "type": "library",
     "description": "A library to access MailCatcher",

@@ -1,19 +1,19 @@
 <?php
 
-namespace Alex\MailCatcher\Behat;
+namespace Alex\MailCatcher\Behat\MailCatcherExtension\Context;
 
 use Alex\MailCatcher\Client;
 use Alex\MailCatcher\Message;
-use Behat\Behat\Context\BehatContext;
-use Behat\Behat\Context\Step\Then;
+//use Behat\Behat\Context\Step\Then;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Context class for mail browsing and manipulation.
  *
  * @author Alexandre Salomé <alexandre.salome@gmail.com>
+ * @author David Delevoye <daviddelevoye@gmail.com>
  */
-class MailCatcherContext extends BehatContext
+class MailCatcherContext implements MailCatcherContextInterface
 {
     /**
      * @var Client|null

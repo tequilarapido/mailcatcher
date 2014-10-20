@@ -5,7 +5,7 @@
 
     <parameters>
         <parameter key="behat.mailcatcher.client.class">Alex\MailCatcher\Client</parameter>
-        <parameter key="behat.mailcatcher.context.initializer.class">Alex\MailCatcher\Behat\MailCatcherExtension\ContextInitializer</parameter>
+        <parameter key="behat.mailcatcher.context.initializer.class">Alex\MailCatcher\Behat\MailCatcherExtension\Context\Initializer\ContextInitializer</parameter>
     </parameters>
 
     <services>

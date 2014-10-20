@@ -7,7 +7,8 @@ use Symfony\Component\Config\FileLocator,
     Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
-use Behat\Behat\Extension\ExtensionInterface;
+use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface,
+    Behat\Testwork\ServiceContainer\ExtensionManager;
 
 /**
  * Mink extension for MailCatcher manipulation.
@@ -19,19 +20,22 @@ class Extension implements ExtensionInterface
     /**
      * {@inheritdoc}
      */
-    public function load(array $config, ContainerBuilder $container)
+    public function getConfigKey()
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/services'));
-        $loader->load('core.xml');
-
-        $container->setParameter('behat.mailcatcher.client.url', $config['url']);
-        $container->setParameter('behat.mailcatcher.purge_before_scenario', $config['purge_before_scenario']);
+        return 'alex_mailcatcher';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getConfig(ArrayNodeDefinition $builder)
+    public function initialize(ExtensionManager $extensionManager)
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configure(ArrayNodeDefinition $builder)
     {
         $builder
             ->children()
@@ -39,6 +43,25 @@ class Extension implements ExtensionInterface
                 ->scalarNode('url')->defaultValue('http://localhost:1080')->end()
             ->end()
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function process(ContainerBuilder $container)
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function load(ContainerBuilder $container, array $config)
+    {
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/services'));
+        $loader->load('core.xml');
+
+        $container->setParameter('behat.mailcatcher.client.url', $config['url']);
+        $container->setParameter('behat.mailcatcher.purge_before_scenario', $config['purge_before_scenario']);
     }
 
     /**
