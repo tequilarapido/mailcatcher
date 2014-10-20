@@ -4,7 +4,6 @@ namespace Alex\MailCatcher\Behat\MailCatcherExtension\Context;
 
 use Alex\MailCatcher\Client;
 use Alex\MailCatcher\Message;
-//use Behat\Behat\Context\Step\Then;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -156,9 +155,7 @@ class MailCatcherContext implements MailCatcherContextInterface
             }, $links))));
         }
 
-        return array(
-            new Then('I am on "'.$href.'"')
-        );
+        return $this->assertPageAddress($href);
     }
 
     /**
