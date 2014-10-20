@@ -187,7 +187,7 @@ class MailCatcherContext implements MailCatcherAwareContext, MinkAwareContext
             }, $links))));
         }
 
-        return $this->mink->visit($href);
+        return $this->mink->getSession($this->mink->getDefaultSessionName())->visit($href);
     }
 
     /**
