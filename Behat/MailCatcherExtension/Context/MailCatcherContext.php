@@ -4,6 +4,8 @@ namespace Alex\MailCatcher\Behat\MailCatcherExtension\Context;
 
 use Alex\MailCatcher\Client;
 use Alex\MailCatcher\Message;
+use Behat\Mink\Mink;
+use Behat\MinkExtension\Context\MinkAwareContext;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -12,7 +14,7 @@ use Symfony\Component\DomCrawler\Crawler;
  * @author Alexandre Salomé <alexandre.salome@gmail.com>
  * @author David Delevoye <daviddelevoye@gmail.com>
  */
-class MailCatcherContext implements MailCatcherAwareContext
+class MailCatcherContext implements MailCatcherAwareContext, MinkAwareContext
 {
     /**
      * @var Client|null
@@ -28,6 +30,36 @@ class MailCatcherContext implements MailCatcherAwareContext
      * @var Message|null
      */
     protected $currentMessage;
+
+    /**
+     * @var Mink
+     */
+    protected $mink;
+
+    /**
+     * @var array
+     */
+    protected $minkParameters;
+
+    /**
+     * Sets Mink instance.
+     *
+     * @param Mink $mink Mink session manager
+     */
+    public function setMink(Mink $mink)
+    {
+        $this->mink = $mink;
+    }
+
+    /**
+     * Sets parameters provided for Mink.
+     *
+     * @param array $parameters
+     */
+    public function setMinkParameters(array $parameters)
+    {
+        $this->minkParameters = $parameters;
+    }
 
     /**
      * Sets configuration of the context.
@@ -155,7 +187,7 @@ class MailCatcherContext implements MailCatcherAwareContext
             }, $links))));
         }
 
-        return $this->assertPageAddress($href);
+        return $this->mink->visit($href);
     }
 
     /**
