@@ -2,7 +2,7 @@
 
 namespace Alex\MailCatcher\Behat\MailCatcherExtension\Context\Initializer;
 
-use Alex\MailCatcher\Behat\MailCatcherExtension\Context\MailCatcherContextInterface;
+use Alex\MailCatcher\Behat\MailCatcherExtension\Context\MailCatcherAwareContext;
 use Alex\MailCatcher\Client;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\Initializer\ContextInitializer as ContextInitializerInterface;
@@ -20,12 +20,12 @@ class ContextInitializer implements ContextInitializerInterface
 
     public function supports(Context $context)
     {
-        return $context instanceof MailCatcherContextInterface;
+        return $context instanceof MailCatcherAwareContext;
     }
 
     public function initializeContext(Context $context)
     {
-        if (!$context instanceof MailCatcherContextInterface) {
+        if (!$context instanceof MailCatcherAwareContext) {
             return;
         }
         
