@@ -69,7 +69,7 @@ class MailCatcherContext implements MailCatcherAwareContext, MinkAwareContext
      */
     public function setConfiguration(Client $client, $purgeBeforeScenario = true)
     {
-        $this->client = $client;
+        $this->client              = $client;
         $this->purgeBeforeScenario = $purgeBeforeScenario;
     }
 
@@ -138,18 +138,7 @@ class MailCatcherContext implements MailCatcherAwareContext, MinkAwareContext
     public function seeInMail($text)
     {
         $message = $this->getCurrentMessage();
-
-        if (!$message->isMultipart()) {
-            $content = $message->getContent();
-        } elseif ($message->hasPart('text/html')) {
-            $content = $this->getCrawler($message)->text();
-        } elseif ($message->hasPart('text/plain')) {
-            $content = $message->getPart('text/plain')->getContent();
-        } else {
-            throw new \RuntimeException(sprintf('Unable to read mail'));
-        }
-
-        if (false === strpos($content, $text)) {
+        if (false === strpos($this->getMessageContent($message), $text)) {
             throw new \InvalidArgumentException(sprintf("Unable to find text \"%s\" in current message:\n%s", $text, $message->getContent()));
         }
     }
@@ -161,16 +150,13 @@ class MailCatcherContext implements MailCatcherAwareContext, MinkAwareContext
     {
         $message = $this->getCurrentMessage();
 
-        if ($message->hasPart('text/html')) {
-            $links = $this->getCrawler($message)->filter('a')->each(function ($link) {
+        $links = $this->getCrawler($message)
+            ->filter('a')->each(function ($link) {
                 return array(
                     'href' => $link->attr('href'),
                     'text' => $link->text()
                 );
             });
-        } else {
-            throw new \RuntimeException(sprintf('Unable to click in mail'));
-        }
 
         $href = null;
         foreach ($links as $link) {
@@ -195,7 +181,7 @@ class MailCatcherContext implements MailCatcherAwareContext, MinkAwareContext
      */
     public function verifyMailsSent($count)
     {
-        $count = (int) $count;
+        $count  = (int)$count;
         $actual = $this->getClient()->getMessageCount();
 
         if ($count !== $actual) {
@@ -218,6 +204,19 @@ class MailCatcherContext implements MailCatcherAwareContext, MinkAwareContext
             throw new \RuntimeException('Can\'t crawl HTML: Symfony DomCrawler component is missing from autoloading.');
         }
 
-        return new Crawler($message->getPart('text/html')->getContent());
+        return new Crawler($this->getMessageContent($message));
+    }
+
+    private function getMessageContent(Message $message)
+    {
+        if (!$message->isMultipart()) {
+            return $message->getContent();
+        } elseif ($message->hasPart('text/html')) {
+            return $this->getCrawler($message)->text();
+        } elseif ($message->hasPart('text/plain')) {
+            return $message->getPart('text/plain')->getContent();
+        } else {
+            throw new \RuntimeException(sprintf('Unable to read mail'));
+        }
     }
 }
